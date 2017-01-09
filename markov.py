@@ -12,13 +12,10 @@ else:
     inputFile = open(input("Enter file path (ex: C:\\Users\\user\\Desktop\\names.txt): "))
     csl = int(input("Enter markov chain seed length: "))
     outputLength = int(input("Enter output length in characters: "))
-#inputFile = open(r"C:\Users\dvangel\Desktop\yob1892.txt")
-inputText = []
-#csl = 6 #chainSeedLength
-#outputLength = 200
 
+inputText = []
 inputText = inputFile.read()
-inputText = "\n" + inputText
+inputText = "\n" + inputText + "\n"
 inputText = inputText.replace("\n","\n"*csl)
 inputText = inputText.lower()
     
@@ -28,14 +25,10 @@ markovDict = dict()
 for index in range(len(inputText)-(csl-1)):
     if inputText[index:index+csl] not in markovDict:
         markovDict[inputText[index:index+csl]] = dict()
-            
-#make sure that newline is in
-markovDict["\n"*csl] = dict()
-        
 
 for index in range(len(inputText)-(csl)):
     if inputText[index + csl] in markovDict[inputText[index:index+csl]]:
-        markovDict[inputText[index:index+csl]][inputText[index+csl]]+= 1
+        markovDict[inputText[index:index+csl]][inputText[index+csl]] += 1
     else:
         markovDict[inputText[index:index+csl]][inputText[index+csl]] = 1
 
@@ -44,11 +37,11 @@ for index in range(len(inputText)-(csl)):
 for key in markovDict:
     keySum = 0
     for character in markovDict[key]:
-        keySum+= markovDict[key][character]
+        keySum += markovDict[key][character]
     cumProb = 0
     for character in markovDict[key]:
-        markovDict[key][character]/= keySum
-        markovDict[key][character]+= cumProb
+        markovDict[key][character] /= keySum
+        markovDict[key][character] += cumProb
         cumProb = markovDict[key][character]
     
 #output markov generations
